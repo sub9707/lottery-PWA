@@ -21,15 +21,11 @@ function useFullscreen() {
 function HoldButton({
   children,
   onActivate,
-  size = 'lg',
-  variant = 'ghost',
-  fillColor = 'bg-zinc-600/50',
+  fillRgba = 'rgba(161,161,170,0.4)',
 }: {
   children: React.ReactNode
   onActivate: () => void
-  size?: 'sm' | 'md' | 'lg' | 'xl'
-  variant?: 'primary' | 'ghost' | 'danger' | 'success'
-  fillColor?: string
+  fillRgba?: string
 }) {
   const [progress, setProgress] = useState(0)
   const raf = useRef<number>(0)
@@ -51,27 +47,20 @@ function HoldButton({
     setProgress(0)
   }
 
+  const bg = progress > 0
+    ? `linear-gradient(to right, ${fillRgba} ${progress}%, rgb(39,39,42) ${progress}%)`
+    : 'rgb(39,39,42)'
+
   return (
-    <div className="relative overflow-hidden rounded">
-      <div
-        className={`absolute inset-y-0 left-0 pointer-events-none ${fillColor}`}
-        style={{
-          width: `${progress}%`,
-          transition: progress === 0 ? 'width 180ms ease-out' : 'none',
-        }}
-      />
-      <Button
-        size={size}
-        variant={variant}
-        fullWidth
-        onPointerDown={beginHold}
-        onPointerUp={cancelHold}
-        onPointerLeave={cancelHold}
-        className="relative"
-      >
-        {children}
-      </Button>
-    </div>
+    <button
+      onPointerDown={beginHold}
+      onPointerUp={cancelHold}
+      onPointerLeave={cancelHold}
+      className="w-full rounded font-semibold select-none px-6 py-4 text-lg min-h-[64px] text-slate-200 border border-zinc-700"
+      style={{ background: bg, transition: progress === 0 ? 'background 180ms ease-out' : 'none' }}
+    >
+      {children}
+    </button>
   )
 }
 
@@ -138,10 +127,10 @@ export function MainPage() {
         <Button size="xl" fullWidth onClick={() => navigate('/check')}>
           번호 확인
         </Button>
-        <HoldButton onActivate={() => navigate('/admin/login')} fillColor="bg-amber-500/40">
+        <HoldButton onActivate={() => navigate('/admin/login')} fillRgba="rgba(245,158,11,0.45)">
           관리자 설정
         </HoldButton>
-        <HoldButton onActivate={() => navigate('/stats')} fillColor="bg-sky-500/40">
+        <HoldButton onActivate={() => navigate('/stats')} fillRgba="rgba(14,165,233,0.45)">
           통계 보기
         </HoldButton>
       </div>
