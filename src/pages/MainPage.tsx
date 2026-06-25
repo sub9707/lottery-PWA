@@ -23,11 +23,13 @@ function HoldButton({
   onActivate,
   size = 'lg',
   variant = 'ghost',
+  fillColor = 'bg-zinc-600/50',
 }: {
   children: React.ReactNode
   onActivate: () => void
   size?: 'sm' | 'md' | 'lg' | 'xl'
   variant?: 'primary' | 'ghost' | 'danger' | 'success'
+  fillColor?: string
 }) {
   const [progress, setProgress] = useState(0)
   const raf = useRef<number>(0)
@@ -52,7 +54,7 @@ function HoldButton({
   return (
     <div className="relative overflow-hidden rounded">
       <div
-        className="absolute inset-y-0 left-0 bg-zinc-600/50 pointer-events-none"
+        className={`absolute inset-y-0 left-0 pointer-events-none ${fillColor}`}
         style={{
           width: `${progress}%`,
           transition: progress === 0 ? 'width 180ms ease-out' : 'none',
@@ -136,10 +138,10 @@ export function MainPage() {
         <Button size="xl" fullWidth onClick={() => navigate('/check')}>
           번호 확인
         </Button>
-        <HoldButton onActivate={() => navigate('/admin/login')}>
+        <HoldButton onActivate={() => navigate('/admin/login')} fillColor="bg-amber-500/40">
           관리자 설정
         </HoldButton>
-        <HoldButton onActivate={() => navigate('/stats')}>
+        <HoldButton onActivate={() => navigate('/stats')} fillColor="bg-sky-500/40">
           통계 보기
         </HoldButton>
       </div>
